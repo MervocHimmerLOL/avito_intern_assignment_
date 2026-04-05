@@ -5,16 +5,15 @@ import random
 
 class AvitoHttpClient:
 
-    # Инициализация http клиента. В аргументы принимает base_url - url апишки,
-    # и seller_id, если не передан, то генерируется сам
-    def __init__(self, base_url: str = "https://qa-internship.avito.com", seller_id: Optional[int] = None):
+    # Инициализация http клиента. В аргументы принимает base_url - url апишки, и seller_id
+    def __init__(self, base_url: str, seller_id: Optional[int] = None):
         self.session = requests.Session()
         self.session.headers.update({
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         })
         self.base_url = base_url.rstrip('/')
-        self.seller_id = seller_id if seller_id else random.randint(111111, 999999)
+        self.seller_id = seller_id
 
     # API v1. Ручки по пути /api/1
 
