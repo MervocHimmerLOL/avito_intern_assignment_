@@ -2,11 +2,14 @@ import pytest
 from api_models import ErrorResponse
 
 
+# Покрытые тест-кейсы: TC-001, TC-003, TC-004, TC-010, TC-011, TC-012, TC-013, TC-014
+
 class TestCreateItemPositive:
 
     @pytest.mark.tc_id("TC-001")
     @pytest.mark.positive
     def test_TC_001_create_with_valid_data(self, client, valid_create_payload):
+        """TC-001: Создание валидного объявления"""
         payload = valid_create_payload(name="name", price=1)
 
         resp = client.create_item(data=payload)
@@ -24,6 +27,7 @@ class TestCreateItemPositive:
         (2147483647, 255, "максимальные значения"),
     ], ids=["min", "max"])
     def test_TC_003_boundary_values(self, client, valid_create_payload, price, name_len, desc):
+        """TC-001: Создание объявлений с граничными значениями"""
         payload = valid_create_payload(
             name="x" * name_len,
             price=price
@@ -37,6 +41,7 @@ class TestCreateItemPositive:
     @pytest.mark.tc_id("TC-004")
     @pytest.mark.positive
     def test_TC_004_multiple_creation_same_seller(self, client, valid_create_payload):
+        """TC-004: Создание нескольких объявлений от одного продавца"""
         created_ids = []
         expected_seller_id = client.seller_id
 
@@ -73,6 +78,7 @@ class TestCreateItemNegative:
     @pytest.mark.tc_id("TC-010")
     @pytest.mark.negative
     def test_TC_010_empty_body(self, client):
+        """TC-010: Создание объявления с пустым телом"""
         resp = client.create_item(data={})
 
         assert resp.status_code == 400, f"Ожидался 400, получен {resp.status_code}"

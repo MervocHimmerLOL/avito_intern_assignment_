@@ -2,6 +2,9 @@ import pytest
 import uuid
 from api_models import Statistics, ErrorResponse
 
+
+# Покрытые тест-кейсы: TC-008, TC-009, TC-020, TC-021, TC-022, TC-023
+
 class TestStatisticsPositive:
     @pytest.mark.tc_id("TC-008")
     @pytest.mark.positive
@@ -35,8 +38,8 @@ class TestStatisticsPositive:
         assert stat.viewCount >= 1, "viewCount должен быть >= 1"
         assert stat.contacts >= 1, "contacts должен быть >= 1"
 
-class TestStatisticsNegative:
 
+class TestStatisticsNegative:
 
     @pytest.mark.tc_id("TC-020")
     @pytest.mark.negative

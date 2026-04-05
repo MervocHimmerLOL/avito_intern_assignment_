@@ -1,5 +1,8 @@
 import pytest
 
+
+# Покрытые тест-кейсы: TC-006, TC-007, TC-017, TC-018, TC-019
+
 class TestGetItemsBySellerPositive:
     @pytest.mark.tc_id("TC-006")
     @pytest.mark.positive
@@ -39,6 +42,7 @@ class TestGetItemsBySellerPositive:
 
         assert resp.status_code == 200, f"Ожидался 200, получен {resp.status_code}"
         assert resp.json() == [], "Для продавца без объявлений должен вернуться пустой массив"
+
 
 class TestGetItemsBySellerNegative:
     @pytest.mark.tc_id("TC-017")

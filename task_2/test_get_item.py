@@ -2,6 +2,9 @@ import pytest
 import uuid
 from api_models import ItemResponse, ErrorResponse
 
+
+# Покрытые тест-кейсы: TC-005, TC-015, TC-016
+
 class TestGetItemByIdPositive:
     @pytest.mark.tc_id("TC-005")
     @pytest.mark.positive
@@ -21,6 +24,7 @@ class TestGetItemByIdPositive:
         assert len(item.name) > 0, "Имя не должно быть пустым"
         assert item.statistics.likes >= 1, "Количество лайков должно быть >= 1"
         assert item.sellerId >= 111111, f"sellerId должен быть в диапазоне, получен: {item.sellerId}"
+
 
 class TestGetItemByIdNegative:
     @pytest.mark.tc_id("TC-015")
