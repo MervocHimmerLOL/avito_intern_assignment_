@@ -3,7 +3,7 @@ import uuid
 from api_models import ItemResponse, ErrorResponse
 
 
-# Покрытые тест-кейсы: TC-005, TC-015, TC-016
+# Покрытые тест-кейсы: TC-005, TC-015, TC-016, ТС-27
 
 class TestGetItemByIdPositive:
     @pytest.mark.tc_id("TC-005")
@@ -56,3 +56,22 @@ class TestGetItemByIdNegative:
         assert error.status == "400", f"Статус должен быть '400', получен: {error.status}"
         assert error.message and ("UUID" in error.message or "некорректный" in error.message.lower()), \
             f"Сообщение должно указывать на некорректный ID: {error.message}"
+
+class TestGetItemByIdCornerCases:
+    @pytest.mark.tc_id("TC-027")
+    @pytest.mark.corner_case
+    def test_TC_027_get_item_idempotency(self, created_item_id, client):
+        """TC-027: Идемпотентность запроса"""
+        resp_1 = client.get_item_by_id(created_item_id)
+        item_1 = self._unpack(resp_1)
+
+        resp_2 = client.get_item_by_id(created_item_id)
+        item_2 = self._unpack(resp_2)
+
+        assert item_1 == item_2, "Запрос неидемпотентный"
+
+    @staticmethod
+    def _unpack(resp):
+        json_data = resp.json()
+        item_data = json_data[0] if isinstance(json_data, list) else json_data
+        return ItemResponse(**item_data)

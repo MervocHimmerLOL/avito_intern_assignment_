@@ -3,7 +3,7 @@ import uuid
 from api_models import Statistics, ErrorResponse
 
 
-# Покрытые тест-кейсы: TC-008, TC-009, TC-020, TC-021, TC-022, TC-023
+# Покрытые тест-кейсы: TC-008, TC-009, TC-020, TC-021, TC-022, TC-023, TC-25, ТС-26
 
 class TestStatisticsPositive:
     @pytest.mark.tc_id("TC-008")
@@ -102,3 +102,34 @@ class TestStatisticsNegative:
         assert error.status == "400", f"Статус должен быть '400', получен: {error.status}"
         assert error.message and "некорректный идентификатор" in error.message.lower(), \
             f"Сообщение должно указывать на некорректный ID: {error.message}"
+
+
+class TestGetStatisticsCornerCases:
+    @pytest.mark.tc_id("TC-25")
+    @pytest.mark.corner_case
+    def test_TC_25_corner_case_idempotency(self, created_item_id, client):
+        """TC-025: Идемпотентность запроса"""
+
+        resp_1 = client.get_statistics_v1(created_item_id)
+        resp_2 = client.get_statistics_v1(created_item_id)
+        stat_1 = self._unpack(resp_1.json())
+        stat_2 = self._unpack(resp_2.json())
+
+        assert stat_1 == stat_2, "Запрос неидемпотентный"
+
+    @pytest.mark.tc_id("TC-26")
+    @pytest.mark.corner_case
+    def test_TC_26_corner_case_idempotency(self, created_item_id, client):
+        """TC-026: Идемпотентность запроса"""
+
+        resp_1 = client.get_statistics_v2(created_item_id)
+        resp_2 = client.get_statistics_v2(created_item_id)
+        stat_1 = self._unpack(resp_1.json())
+        stat_2 = self._unpack(resp_2.json())
+
+        assert stat_1 == stat_2, "Запрос неидемпотентный"
+
+    @staticmethod
+    def _unpack(data):
+        stat_data = data[0] if isinstance(data, list) else data
+        return Statistics(**stat_data)

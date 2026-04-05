@@ -1,7 +1,7 @@
 import pytest
 
 
-# Покрытые тест-кейсы: TC-006, TC-007, TC-017, TC-018, TC-019
+# Покрытые тест-кейсы: TC-006, TC-007, TC-017, TC-018, TC-019, TC-24
 
 class TestGetItemsBySellerPositive:
     @pytest.mark.tc_id("TC-006")
@@ -75,3 +75,34 @@ class TestGetItemsBySellerNegative:
         resp = client.session.get(url)
 
         assert resp.status_code == 400, f"Ожидался 400, получен {resp.status_code}"
+
+
+class TestGetItemsBySellerCornerCases:
+    @pytest.mark.tc_id("TC-24")
+    @pytest.mark.corner_case
+    def test_TC_24_corner_case_idempotency(self, client, valid_create_payload):
+        """TC-024: Идемпотентность запроса"""
+        created_ids = []
+        expected_seller_id = client.seller_id
+
+        for i in range(3):
+            payload = valid_create_payload(name=f"Seller-Test-{i}")
+            resp = client.create_item(data=payload)
+            assert resp.status_code == 200
+            item_id = resp.json()["status"].split(' - ')[-1].strip()
+            created_ids.append(item_id)
+
+        try:
+            resp1 = client.get_items_by_seller(expected_seller_id)
+            assert resp1.status_code == 200
+            items1 = resp1.json()
+
+            resp2 = client.get_items_by_seller(expected_seller_id)
+            assert resp2.status_code == 200
+            items2 = resp2.json()
+
+            assert items1 == items2, "Запрос не идемпотентный"
+
+        finally:
+            for item_id in created_ids:
+                client.delete_item_by_id(item_id)
