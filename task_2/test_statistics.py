@@ -1,6 +1,6 @@
 import pytest
 import uuid
-from api_models import Statistics, ErrorResponse
+from utilities.api_models import Statistics, ErrorResponse
 
 
 # Покрытые тест-кейсы: TC-008, TC-009, TC-020, TC-021, TC-022, TC-023, TC-25, ТС-26

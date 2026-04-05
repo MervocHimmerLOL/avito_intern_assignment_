@@ -1,6 +1,6 @@
 import pytest
 import uuid
-from api_models import ItemResponse, ErrorResponse
+from utilities.api_models import ItemResponse, ErrorResponse
 
 
 # Покрытые тест-кейсы: TC-005, TC-015, TC-016, ТС-27

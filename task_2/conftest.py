@@ -2,8 +2,8 @@ import pytest
 import uuid
 import random
 
-from avito_http_client import AvitoHttpClient
-from api_models import CreateItemRequest
+from utilities.avito_http_client import AvitoHttpClient
+from utilities.api_models import CreateItemRequest
 
 
 # Конфиг с base_url и seller_id для http клиента

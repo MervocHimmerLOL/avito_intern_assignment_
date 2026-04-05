@@ -1,5 +1,5 @@
 import pytest
-from api_models import ErrorResponse
+from utilities.api_models import ErrorResponse
 
 
 # Покрытые тест-кейсы: TC-001, TC-003, TC-004, TC-010, TC-011, TC-012, TC-013, TC-014
